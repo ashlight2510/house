@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>집값 못 산 죄 계산기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 14px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: #f7fafc;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .result.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .price-item:last-child {
+            border-bottom: none;
+        }
+
+        .price-label {
+            color: #718096;
+            font-size: 15px;
+        }
+
+        .price-value {
+            font-weight: 700;
+            font-size: 18px;
+            color: #2d3748;
+        }
+
+        .loss-amount {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .loss-label {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .loss-value {
+            color: white;
+            font-size: 32px;
+            font-weight: 900;
+        }
+
+        .bonus-analysis {
+            margin-top: 25px;
+            padding: 20px;
+            background: #fff5f5;
+            border-radius: 12px;
+        }
+
+        .bonus-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #c53030;
+        }
+
+        .bonus-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            color: #742a2a;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .share-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .share-btn:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+        }
+
+        .share-btn.copy {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .share-btn.copy:hover {
+            background: #5568d3;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .loss-value {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 집값 못 산 죄 계산기</h1>
+        <p class="subtitle">그때 집을 샀다면... 지금 얼마였을까?</p>
+
+        <div class="input-group">
+            <label for="region">📍 지역 선택</label>
+            <select id="region">
+                <option value="">지역을 선택하세요</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="year">📅 기준 연도</label>
+            <select id="year">
+                <option value="">연도를 선택하세요</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="size">📐 평수</label>
+            <select id="size">
+                <option value="">평수를 선택하세요</option>
+                <option value="20">20평대</option>
+                <option value="30">30평대</option>
+                <option value="40">40평대</option>
+            </select>
+        </div>
+
+        <button class="calculate-btn" onclick="calculate()">💰 계산하기</button>
+
+        <div id="result" class="result">
+            <div class="result-title" id="resultTitle"></div>
+            
+            <div class="price-item">
+                <span class="price-label">기준년도 당시 가격</span>
+                <span class="price-value" id="pastPrice"></span>
+            </div>
+            <div class="price-item">
+                <span class="price-label">2024년 현재 가격</span>
+                <span class="price-value" id="currentPrice"></span>
+            </div>
+
+            <div class="loss-amount">
+                <div class="loss-label">당신이 안 산 대가</div>
+                <div class="loss-value" id="lossAmount"></div>
+            </div>
+
+            <div class="bonus-analysis">
+                <div class="bonus-title">🤣 집값 대신 산 것들</div>
+                <div id="bonusItems"></div>
+            </div>
+
+            <div class="share-buttons">
+                <button class="share-btn" onclick="copyLink()">🔗 링크 복사</button>
+                <button class="share-btn" onclick="shareKakao()">💬 카톡 공유</button>
+                <button class="share-btn" onclick="downloadImage()">📸 이미지 저장</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 지역별 시세 데이터 (단위: 원)
+        const priceData = {
+            "마포구": {
+                "20": { "2015": 450000000, "2020": 720000000, "2024": 890000000 },
+                "30": { "2015": 620000000, "2020": 950000000, "2024": 1180000000 },
+                "40": { "2015": 780000000, "2020": 1200000000, "2024": 1480000000 }
+            },
+            "송파구": {
+                "20": { "2015": 520000000, "2020": 820000000, "2024": 1100000000 },
+                "30": { "2015": 750000000, "2020": 1250000000, "2024": 1600000000 },
+                "40": { "2015": 950000000, "2020": 1580000000, "2024": 2000000000 }
+            },
+            "강남구": {
+                "20": { "2015": 680000000, "2020": 1100000000, "2024": 1350000000 },
+                "30": { "2015": 980000000, "2020": 1650000000, "2024": 2050000000 },
+                "40": { "2015": 1280000000, "2020": 2200000000, "2024": 2750000000 }
+            },
+            "서초구": {
+                "20": { "2015": 650000000, "2020": 1050000000, "2024": 1300000000 },
+                "30": { "2015": 920000000, "2020": 1550000000, "2024": 1950000000 },
+                "40": { "2015": 1200000000, "2020": 2050000000, "2024": 2600000000 }
+            },
+            "용산구": {
+                "20": { "2015": 480000000, "2020": 750000000, "2024": 920000000 },
+                "30": { "2015": 680000000, "2020": 1050000000, "2024": 1280000000 },
+                "40": { "2015": 850000000, "2020": 1350000000, "2024": 1650000000 }
+            },
+            "성동구": {
+                "20": { "2015": 420000000, "2020": 680000000, "2024": 850000000 },
+                "30": { "2015": 580000000, "2020": 920000000, "2024": 1150000000 },
+                "40": { "2015": 720000000, "2020": 1180000000, "2024": 1480000000 }
+            },
+            "광진구": {
+                "20": { "2015": 380000000, "2020": 620000000, "2024": 780000000 },
+                "30": { "2015": 520000000, "2020": 850000000, "2024": 1080000000 },
+                "40": { "2015": 650000000, "2020": 1080000000, "2024": 1380000000 }
+            },
+            "은평구": {
+                "20": { "2015": 350000000, "2020": 580000000, "2024": 720000000 },
+                "30": { "2015": 480000000, "2020": 800000000, "2024": 1000000000 },
+                "40": { "2015": 600000000, "2020": 1000000000, "2024": 1280000000 }
+            },
+            "노원구": {
+                "20": { "2015": 320000000, "2020": 520000000, "2024": 650000000 },
+                "30": { "2015": 440000000, "2020": 720000000, "2024": 900000000 },
+                "40": { "2015": 550000000, "2020": 900000000, "2024": 1150000000 }
+            },
+            "강동구": {
+                "20": { "2015": 380000000, "2020": 620000000, "2024": 780000000 },
+                "30": { "2015": 520000000, "2020": 850000000, "2024": 1080000000 },
+                "40": { "2015": 650000000, "2020": 1080000000, "2024": 1380000000 }
+            },
+            "강서구": {
+                "20": { "2015": 360000000, "2020": 580000000, "2024": 720000000 },
+                "30": { "2015": 490000000, "2020": 800000000, "2024": 1000000000 },
+                "40": { "2015": 610000000, "2020": 1000000000, "2024": 1280000000 }
+            },
+            "양천구": {
+                "20": { "2015": 340000000, "2020": 560000000, "2024": 700000000 },
+                "30": { "2015": 470000000, "2020": 770000000, "2024": 960000000 },
+                "40": { "2015": 590000000, "2020": 970000000, "2024": 1220000000 }
+            },
+            "영등포구": {
+                "20": { "2015": 400000000, "2020": 650000000, "2024": 820000000 },
+                "30": { "2015": 550000000, "2020": 900000000, "2024": 1120000000 },
+                "40": { "2015": 690000000, "2020": 1130000000, "2024": 1420000000 }
+            },
+            "관악구": {
+                "20": { "2015": 360000000, "2020": 580000000, "2024": 720000000 },
+                "30": { "2015": 490000000, "2020": 800000000, "2024": 1000000000 },
+                "40": { "2015": 610000000, "2020": 1000000000, "2024": 1280000000 }
+            },
+            "금천구": {
+                "20": { "2015": 320000000, "2020": 520000000, "2024": 650000000 },
+                "30": { "2015": 440000000, "2020": 720000000, "2024": 900000000 },
+                "40": { "2015": 550000000, "2020": 900000000, "2024": 1150000000 }
+            },
+            "구로구": {
+                "20": { "2015": 340000000, "2020": 560000000, "2024": 700000000 },
+                "30": { "2015": 470000000, "2020": 770000000, "2024": 960000000 },
+                "40": { "2015": 590000000, "2020": 970000000, "2024": 1220000000 }
+            }
+        };
+
+        // 연도 옵션 생성
+        const yearSelect = document.getElementById('year');
+        for (let year = 2015; year <= 2024; year++) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year + '년';
+            yearSelect.appendChild(option);
+        }
+
+        // 지역 옵션 생성
+        const regionSelect = document.getElementById('region');
+        Object.keys(priceData).sort().forEach(region => {
+            const option = document.createElement('option');
+            option.value = region;
+            option.textContent = region;
+            regionSelect.appendChild(option);
+        });
+
+        function formatPrice(price) {
+            if (price >= 100000000) {
+                return (price / 100000000).toFixed(1) + '억 원';
+            } else if (price >= 10000) {
+                return (price / 10000).toFixed(0) + '만 원';
+            }
+            return price.toLocaleString() + '원';
+        }
+
+        function calculate() {
+            const region = document.getElementById('region').value;
+            const year = document.getElementById('year').value;
+            const size = document.getElementById('size').value;
+
+            if (!region || !year || !size) {
+                alert('모든 항목을 선택해주세요!');
+                return;
+            }
+
+            const regionData = priceData[region];
+            if (!regionData || !regionData[size] || !regionData[size][year]) {
+                alert('해당 지역/평수/연도의 데이터가 없습니다.');
+                return;
+            }
+
+            const pastPrice = regionData[size][year];
+            const currentPrice = regionData[size]['2024'];
+            const loss = currentPrice - pastPrice;
+
+            // 결과 표시
+            document.getElementById('resultTitle').textContent = `🏡 ${region} 아파트 ${size}평대`;
+            document.getElementById('pastPrice').textContent = formatPrice(pastPrice);
+            document.getElementById('currentPrice').textContent = formatPrice(currentPrice);
+            document.getElementById('lossAmount').textContent = formatPrice(loss);
+
+            // 보너스 분석
+            const bonusItems = calculateBonusItems(loss);
+            const bonusContainer = document.getElementById('bonusItems');
+            bonusContainer.innerHTML = '';
+            bonusItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bonus-item';
+                div.innerHTML = `<span>${item.name}</span><span><strong>${item.count}</strong></span>`;
+                bonusContainer.appendChild(div);
+            });
+
+            document.getElementById('result').classList.add('show');
+        }
+
+        function calculateBonusItems(loss) {
+            // 각 항목의 평균 가격
+            const items = [
+                { name: '🍕 배달음식', price: 15000 },
+                { name: '☕ 카페라떼', price: 5000 },
+                { name: '🚕 택시', price: 8000 },
+                { name: '🎧 에어팟', price: 250000 },
+                { name: '🍺 맥주', price: 5000 },
+                { name: '🍔 햄버거', price: 12000 }
+            ];
+
+            return items.map(item => ({
+                name: item.name,
+                count: Math.floor(loss / item.price).toLocaleString() + (item.name.includes('에어팟') ? '개' : '개')
+            }));
+        }
+
+        function copyLink() {
+            const region = document.getElementById('region').value;
+            const year = document.getElementById('year').value;
+            const size = document.getElementById('size').value;
+            
+            const url = window.location.href.split('?')[0] + `?region=${region}&year=${year}&size=${size}`;
+            
+            navigator.clipboard.writeText(url).then(() => {
+                alert('링크가 복사되었습니다!');
+            }).catch(() => {
+                // 폴백
+                const textarea = document.createElement('textarea');
+                textarea.value = url;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('링크가 복사되었습니다!');
+            });
+        }
+
+        function shareKakao() {
+            const region = document.getElementById('region').value;
+            const year = document.getElementById('year').value;
+            const size = document.getElementById('size').value;
+            const loss = document.getElementById('lossAmount').textContent;
+            
+            const text = `🏠 집값 못 산 죄 계산기\n\n${region} ${size}평대\n${year}년 기준\n\n안 산 대가: ${loss}\n\n나도 계산해보기 👉`;
+            const url = window.location.href.split('?')[0] + `?region=${region}&year=${year}&size=${size}`;
+            
+            if (window.Kakao && window.Kakao.isInitialized()) {
+                window.Kakao.Share.sendDefault({
+                    objectType: 'feed',
+                    content: {
+                        title: '집값 못 산 죄 계산기',
+                        description: text,
+                        imageUrl: window.location.origin + '/og-image.jpg',
+                        link: {
+                            mobileWebUrl: url,
+                            webUrl: url
+                        }
+                    }
+                });
+            } else {
+                // 카카오톡이 없으면 링크 복사로 대체
+                copyLink();
+            }
+        }
+
+        function downloadImage() {
+            const resultDiv = document.getElementById('result');
+            const title = document.getElementById('resultTitle').textContent;
+            const loss = document.getElementById('lossAmount').textContent;
+            
+            // html2canvas 라이브러리가 필요하지만, 간단한 방법으로 대체
+            alert('이미지 저장 기능은 html2canvas 라이브러리 추가가 필요합니다.\n현재는 링크 복사를 이용해주세요!');
+        }
+
+        // URL 파라미터로 자동 계산
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const region = params.get('region');
+            const year = params.get('year');
+            const size = params.get('size');
+            
+            if (region && year && size) {
+                document.getElementById('region').value = region;
+                document.getElementById('year').value = year;
+                document.getElementById('size').value = size;
+                calculate();
+            }
+        });
+    </script>
+</body>
+</html>
