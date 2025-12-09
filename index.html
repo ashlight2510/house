@@ -221,6 +221,15 @@
             margin-right: 8px;
         }
 
+        .ad-container {
+            margin: 20px 0;
+            text-align: center;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 20px;
@@ -240,6 +249,14 @@
     <div class="container">
         <h1>🏠 집값 못 산 죄 계산기</h1>
         <p class="subtitle">그때 집을 샀다면... 지금 얼마였을까?</p>
+
+        <!-- 광고 영역 1: 제목 아래 -->
+        <div class="ad-container">
+            <ins class="kakao_ad_area" style="display:none;"
+                data-ad-unit = "DAN-KJJsjWOErdMwgRJi"
+                data-ad-width = "300"
+                data-ad-height = "250"></ins>
+        </div>
 
         <div class="input-group">
             <label for="region">📍 지역 선택</label>
@@ -266,6 +283,14 @@
         </div>
 
         <button class="calculate-btn" onclick="calculate()">💰 계산하기</button>
+
+        <!-- 광고 영역 2: 계산 버튼 아래 -->
+        <div class="ad-container">
+            <ins class="kakao_ad_area" style="display:none;"
+                data-ad-unit = "DAN-KJJsjWOErdMwgRJi"
+                data-ad-width = "300"
+                data-ad-height = "250"></ins>
+        </div>
 
         <div id="result" class="result">
             <div class="result-title" id="resultTitle"></div>
@@ -294,6 +319,14 @@
                 <button class="share-btn" onclick="shareKakao()">💬 카톡 공유</button>
                 <button class="share-btn" onclick="downloadImage()">📸 이미지 저장</button>
             </div>
+        </div>
+
+        <!-- 광고 영역 3: 결과 영역 아래 -->
+        <div class="ad-container">
+            <ins class="kakao_ad_area" style="display:none;"
+                data-ad-unit = "DAN-KJJsjWOErdMwgRJi"
+                data-ad-width = "300"
+                data-ad-height = "250"></ins>
         </div>
     </div>
 
@@ -539,5 +572,7 @@
             }
         });
     </script>
+    <!-- 카카오 애드핏 스크립트 -->
+    <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
 </body>
 </html>
