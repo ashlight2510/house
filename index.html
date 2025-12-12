@@ -230,6 +230,31 @@
         margin-right: 8px;
       }
 
+      .funny-link-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 25px;
+      }
+
+      .funny-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 9999px;
+        background: linear-gradient(to right, #ec4899, #f59e0b);
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      .funny-link:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
       .ad-container {
         margin: 20px 0;
         text-align: center;
@@ -312,6 +337,16 @@
         <div class="share-buttons">
           <button class="share-btn" onclick="copyLink()">🔗 링크 복사</button>
         </div>
+      </div>
+
+      <div class="funny-link-wrapper">
+        <a
+          href="https://funnyfunny.cloud"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="funny-link"
+          >😄 FunnyFunny</a
+        >
       </div>
     </div>
 
