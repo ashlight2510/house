@@ -234,6 +234,33 @@
         background: #5568d3;
       }
 
+      .lang-switch {
+        display: inline-flex;
+        gap: 6px;
+        padding: 4px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        margin-bottom: 16px;
+      }
+
+      .lang-switch button {
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 12px;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 999px;
+        cursor: pointer;
+        letter-spacing: 0.08em;
+      }
+
+      .lang-switch button.active {
+        background: #10b981;
+        color: #0b1120;
+      }
+
       .emoji {
         font-size: 24px;
         margin-right: 8px;
@@ -329,61 +356,65 @@
   </style>
 </head>
   <body><div class="container">
-      <h1>🏠 집 못 산 죄 계산기</h1>
-      <p class="subtitle">그때 집을 샀다면... 지금 얼마였을까?</p>
+      <div class="lang-switch" role="tablist" aria-label="Language switcher">
+        <button type="button" data-lang="ko" class="active">한국어</button>
+        <button type="button" data-lang="en">English</button>
+      </div>
+      <h1 data-i18n="heroTitle">🏠 집 못 산 죄 계산기</h1>
+      <p class="subtitle" data-i18n="subtitle">그때 집을 샀다면... 지금 얼마였을까?</p>
 
       <div class="input-group">
-        <label for="region">📍 지역 선택</label>
+        <label for="region" data-i18n="regionLabel">📍 지역 선택</label>
         <select id="region">
-          <option value="">지역을 선택하세요</option>
+          <option value="" data-i18n="regionPlaceholder">지역을 선택하세요</option>
         </select>
       </div>
 
       <div class="input-group">
-        <label for="year">📅 기준 연도</label>
+        <label for="year" data-i18n="yearLabel">📅 기준 연도</label>
         <select id="year">
-          <option value="">연도를 선택하세요</option>
+          <option value="" data-i18n="yearPlaceholder">연도를 선택하세요</option>
         </select>
       </div>
 
       <div class="input-group">
-        <label for="size">📐 평수</label>
+        <label for="size" data-i18n="sizeLabel">📐 평수</label>
         <select id="size">
-          <option value="">평수를 선택하세요</option>
+          <option value="" data-i18n="sizePlaceholder">평수를 선택하세요</option>
           <option value="20">20평대</option>
           <option value="30">30평대</option>
           <option value="40">40평대</option>
         </select>
       </div>
 
-      <button class="calculate-btn" onclick="calculate()">💰 계산하기</button>
+      <button class="calculate-btn" onclick="calculate()" data-i18n="calculateButton">💰 계산하기</button>
 
       <div id="result" class="result">
         <div class="result-title" id="resultTitle"></div>
 
         <div class="price-item">
-          <span class="price-label">기준년도 당시 가격</span>
+          <span class="price-label" data-i18n="pastPriceLabel">기준년도 당시 가격</span>
           <span class="price-value" id="pastPrice"></span>
         </div>
         <div class="price-item">
-          <span class="price-label" id="currentYearLabel"
+          <span class="price-label" id="currentYearLabel" data-i18n="currentYearLabel"
             >2025년 현재 가격</span
           >
           <span class="price-value" id="currentPrice"></span>
         </div>
 
         <div class="loss-amount">
-          <div class="loss-label">당신이 안 산 대가</div>
+          <div class="loss-label" data-i18n="lossLabel">당신이 안 산 대가</div>
           <div class="loss-value" id="lossAmount"></div>
         </div>
 
         <div class="bonus-analysis">
-          <div class="bonus-title">🤣 집값 대신 산 것들</div>
+          <div class="bonus-title" data-i18n="bonusTitle">🤣 집값 대신 산 것들</div>
           <div id="bonusItems"></div>
         </div>
 
         <div class="share-buttons">
-          <button class="share-btn" onclick="copyLink()">🔗 링크 복사</button>
+          <button class="share-btn" onclick="copyLink()" data-i18n="copyButton">🔗 링크 복사</button>
         </div>
       </div>
 
@@ -393,6 +424,7 @@
           target="_blank"
           rel="noopener noreferrer"
           class="funny-link"
+          data-i18n="funnyLink"
           >😄 FunnyFunny</a
         >
       </div>
@@ -401,6 +433,175 @@
     <!-- 광고 영역: 페이지 하단 -->
     <div class="ad-container">
       </div>
+
+    <script>
+      const translations = {
+        ko: {
+          metaTitle: "집 못 산 죄 계산기",
+          heroTitle: "🏠 집 못 산 죄 계산기",
+          subtitle: "그때 집을 샀다면... 지금 얼마였을까?",
+          regionLabel: "📍 지역 선택",
+          yearLabel: "📅 기준 연도",
+          sizeLabel: "📐 평수",
+          regionPlaceholder: "지역을 선택하세요",
+          yearPlaceholder: "연도를 선택하세요",
+          sizePlaceholder: "평수를 선택하세요",
+          calculateButton: "💰 계산하기",
+          pastPriceLabel: "기준년도 당시 가격",
+          currentYearLabel: "{year}년 현재 가격",
+          resultTitleTemplate: "🏡 {region} 아파트 {size}평대",
+          lossLabel: "당신이 안 산 대가",
+          bonusTitle: "🤣 집값 대신 산 것들",
+          copyButton: "🔗 링크 복사",
+          funnyLink: "😄 FunnyFunny",
+          moreTests: "더 많은 테스트 해보기",
+          alertMissing: "모든 항목을 선택해주세요!",
+          alertNoData: "해당 지역/평수의 데이터가 없습니다.",
+          alertFetch: "데이터를 불러올 수 없습니다.",
+          copySuccess: "링크가 복사되었습니다!",
+        },
+        en: {
+          metaTitle: "Home Price Opportunity Cost Calculator",
+          heroTitle: "🏠 Home Price Missed Gains Calculator",
+          subtitle:
+            "What would it be worth today if you had bought back then?",
+          regionLabel: "📍 Choose a neighborhood",
+          yearLabel: "📅 Reference year",
+          sizeLabel: "📐 Apartment size",
+          regionPlaceholder: "Select a region",
+          yearPlaceholder: "Pick a year",
+          sizePlaceholder: "Choose a size range",
+          calculateButton: "💰 Calculate",
+          pastPriceLabel: "Price back then",
+          currentYearLabel: "Current price ({year})",
+          resultTitleTemplate: "{region} apartment {size}평대",
+          lossLabel: "Opportunity cost",
+          bonusTitle: "Things you could've bought instead",
+          copyButton: "🔗 Copy link",
+          funnyLink: "😄 FunnyFunny",
+          moreTests: "Try more tests",
+          alertMissing: "Please fill out every field!",
+          alertNoData: "No data for the selected region/size.",
+          alertFetch: "Unable to load data.",
+          copySuccess: "Link copied!",
+        },
+      };
+      const defaultLang = "en";
+      const supportedLangs = ["ko", "en"];
+      let currentLang = defaultLang;
+
+      function getPack() {
+        return translations[currentLang] || translations.ko;
+      }
+
+      function formatTemplate(template, vars = {}) {
+        if (typeof template !== "string") return "";
+        return template.replace(/\{(.*?)\}/g, (_, key) =>
+          vars[key] !== undefined ? vars[key] : ""
+        );
+      }
+
+      function t(key, vars = {}) {
+        const pack = getPack();
+        const value =
+          (pack && pack[key]) || translations.ko[key] || key || "";
+        return formatTemplate(value, vars);
+      }
+
+      function getCurrentYearForLabel() {
+        return window.currentYear || new Date().getFullYear();
+      }
+
+      function updateCurrentYearLabel() {
+        const label = document.getElementById("currentYearLabel");
+        if (!label) return;
+        label.textContent = t("currentYearLabel", {
+          year: getCurrentYearForLabel(),
+        });
+      }
+
+      function updateMoreTestsText() {
+        const moreBtn = document.getElementById("more-tests-btn");
+        if (moreBtn) {
+          moreBtn.textContent = t("moreTests");
+        }
+      }
+
+      window.updateMoreTestsText = updateMoreTestsText;
+
+      function applyTranslations() {
+        document.title = t("metaTitle");
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.dataset.i18n;
+          if (!key) return;
+          const text = t(key);
+          el.textContent = text;
+        });
+        updateCurrentYearLabel();
+        updateMoreTestsText();
+      }
+
+      function setLang(lang, options = {}) {
+        const nextLang = translations[lang] ? lang : defaultLang;
+        currentLang = nextLang;
+        document.documentElement.lang = nextLang;
+        localStorage.setItem("preferredLang", nextLang);
+        document.querySelectorAll(".lang-switch button").forEach((button) => {
+          button.classList.toggle(
+            "active",
+            button.dataset.lang === nextLang
+          );
+        });
+        applyTranslations();
+        if (options.updateUrl) {
+          const url = new URL(window.location.href);
+          url.searchParams.set("lang", nextLang);
+          window.history.replaceState({}, "", url);
+        }
+      }
+
+      function getRegionPreferredLang(fallback = defaultLang) {
+        const intlLocale =
+          typeof Intl === "object" && typeof Intl.DateTimeFormat === "function"
+            ? Intl.DateTimeFormat().resolvedOptions().locale
+            : "";
+        const sources = [
+          ...(navigator.languages || []),
+          navigator.language,
+          navigator.userLanguage,
+          intlLocale,
+        ]
+          .filter(Boolean)
+          .map((locale) => locale.toLowerCase());
+        const hasKorean = sources.some((locale) => locale.startsWith("ko"));
+        return hasKorean ? "ko" : fallback;
+      }
+
+      function detectLang() {
+        const params = new URLSearchParams(window.location.search);
+        const langParam = params.get("lang");
+        if (supportedLangs.includes(langParam)) {
+          return langParam;
+        }
+        const stored = localStorage.getItem("preferredLang");
+        if (supportedLangs.includes(stored)) {
+          return stored;
+        }
+        const candidate = getRegionPreferredLang(defaultLang);
+        return supportedLangs.includes(candidate) ? candidate : defaultLang;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .querySelectorAll(".lang-switch button")
+          .forEach((button) => {
+            button.addEventListener("click", () => {
+              setLang(button.dataset.lang, { updateUrl: true });
+            });
+          });
+        setLang(detectLang(), { updateUrl: false });
+      });
+    </script>
 
     <script>
       // 지역별 시세 데이터 (단위: 원)
@@ -777,6 +978,7 @@
 
       // 현재 연도 가져오기
       const currentYear = new Date().getFullYear();
+      window.currentYear = currentYear;
 
       // 연도 옵션 생성 (2015년부터 현재 연도까지)
       const yearSelect = document.getElementById("year");
@@ -874,13 +1076,13 @@
         const size = document.getElementById("size").value;
 
         if (!region || !year || !size) {
-          alert("모든 항목을 선택해주세요!");
+          alert(t("alertMissing"));
           return;
         }
 
         const regionData = priceData[region];
         if (!regionData || !regionData[size]) {
-          alert("해당 지역/평수의 데이터가 없습니다.");
+          alert(t("alertNoData"));
           return;
         }
 
@@ -889,21 +1091,23 @@
         const currentPrice = getPriceForYear(regionData, size, currentYear);
 
         if (pastPrice === null || currentPrice === null) {
-          alert("데이터를 불러올 수 없습니다.");
+          alert(t("alertFetch"));
           return;
         }
 
         const loss = currentPrice - pastPrice;
 
         // 결과 표시
-        document.getElementById(
-          "resultTitle"
-        ).textContent = `🏡 ${region} 아파트 ${size}평대`;
+        document.getElementById("resultTitle").textContent = t(
+          "resultTitleTemplate",
+          { region, size }
+        );
         document.getElementById("pastPrice").textContent =
           formatPrice(pastPrice);
-        document.getElementById(
-          "currentYearLabel"
-        ).textContent = `${currentYear}년 현재 가격`;
+        document.getElementById("currentYearLabel").textContent = t(
+          "currentYearLabel",
+          { year: currentYear }
+        );
         document.getElementById("currentPrice").textContent =
           formatPrice(currentPrice);
         document.getElementById("lossAmount").textContent = formatPrice(loss);
@@ -953,7 +1157,7 @@
         navigator.clipboard
           .writeText(url)
           .then(() => {
-            alert("링크가 복사되었습니다!");
+            alert(t("copySuccess"));
           })
           .catch(() => {
             // 폴백
@@ -963,16 +1167,16 @@
             textarea.select();
             document.execCommand("copy");
             document.body.removeChild(textarea);
-            alert("링크가 복사되었습니다!");
+            alert(t("copySuccess"));
           });
       }
 
       // URL 파라미터로 자동 계산
       window.addEventListener("DOMContentLoaded", () => {
         // 현재 연도 레이블 초기화
-        document.getElementById(
-          "currentYearLabel"
-        ).textContent = `${currentYear}년 현재 가격`;
+        document.getElementById("currentYearLabel").textContent = t("currentYearLabel", {
+          year: currentYear,
+        });
 
         const params = new URLSearchParams(window.location.search);
         const region = params.get("region");
@@ -997,7 +1201,7 @@
           moreBtn.id = 'more-tests-btn';
           moreBtn.type = 'button';
           moreBtn.dataset.url = targetUrl;
-          moreBtn.textContent = '더 많은 테스트 해보기';
+          moreBtn.textContent = t("moreTests");
           moreBtn.className = 'more-tests-btn';
           moreBtn.style.cssText = 'margin-top:12px;width:100%;padding:14px;background:#fff;border:2px solid #e2e8f0;border-radius:10px;font-size:16px;font-weight:700;color:#4a5568;transition:all 0.2s';
           moreBtn.addEventListener('click', function () {
@@ -1008,6 +1212,9 @@
             shareButton.insertAdjacentElement('afterend', moreBtn);
           } else if (document.body) {
             document.body.appendChild(moreBtn);
+          }
+          if (typeof updateMoreTestsText === "function") {
+            updateMoreTestsText();
           }
         }
         if (document.readyState === 'loading') {
